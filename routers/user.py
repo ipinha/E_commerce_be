@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 import models.user
 import schemas
 from database import get_db
 import schemas.user
 from hash import Hash
+from  oauth2 import get_current_user
 
 
 
@@ -30,4 +31,7 @@ def register(request : schemas.user.UserCreate,db :Session = Depends(get_db) ):
     return new_user
 
 
+@router.get('/role', response_model=dict)
+def get_user_role(current_user: schemas.authentication.TokenData = Depends(get_current_user)):
+    return {'isAdmin': current_user.is_admin}
     

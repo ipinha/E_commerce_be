@@ -6,6 +6,7 @@ from database import get_db
 import schemas.product
 import schemas.user
 from typing import List
+from oauth2 import get_current_user
 
 router = APIRouter(
     tags=['Product'],
@@ -40,17 +41,21 @@ def create(product : schemas.product.ProductCreate, db: Session = Depends(get_db
 
 
 @router.put('/update/{id}')
-def update(id:int, product : schemas.product.Product , db:Session = Depends(get_db)):
-    u_product = db.query(models.product.Product).filter(models.product.Product.product_id ==id).first()
-    if not u_product:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"product with id {id} not found")
-    
-    for field, value in product.dict().items():
-        setattr(u_product, field, value)
-    db.commit()
-    db.refresh(u_product)
-    return {'cap nhat thanh cong'}
+def update(id:int, product : schemas.product.ProductBase , db:Session = Depends(get_db), current_user: schemas.authentication.TokenData = Depends(get_current_user)):
+    user = db.query(models.user.User).filter(models.user.User.email == current_user.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.is_admin:
+        u_product = db.query(models.product.Product).filter(models.product.Product.product_id ==id).first()
+        if not u_product:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"product with id {id} not found")
+        
+        for field, value in product.dict().items():
+            setattr(u_product, field, value)
+        db.commit()
+        db.refresh(u_product)
+        return {'cap nhat thanh cong'}
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)

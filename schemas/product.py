@@ -15,5 +15,6 @@ class ProductCreate(ProductBase):
         orm_mode = True
 
 class Product(ProductBase):
+    product_id:int
     class Config:
         orm_mode = True

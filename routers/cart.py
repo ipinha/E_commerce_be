@@ -58,8 +58,6 @@ def get_cart(current_user: schemas.authentication.TokenData = Depends(get_curren
         raise HTTPException(status_code=404, detail="Cart not found")
 
     cart_items = db.query(models.cart.CartItem).filter(models.cart.CartItem.cart_id == cart.cart_id).all()
-
-    # Chuẩn bị phản hồi với thông tin chi tiết về sản phẩm và giá hiện tại
     cart_details = []
     for item in cart_items:
         product = db.query(models.product.Product).filter(models.product.Product.product_id== item.product_id).first()
