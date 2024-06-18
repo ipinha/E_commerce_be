@@ -59,14 +59,18 @@ def update(id:int, product : schemas.product.ProductBase , db:Session = Depends(
 
 
 @router.delete('/delete/{id}', status_code=status.HTTP_200_OK)
-def delete(id: int, db: Session = Depends(get_db)):
-    d_product = db.query(models.product.Product).filter(models.product.Product.product_id == id).first()
-    if not d_product:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Product with id {id} not found")
-    db.delete(d_product)
-    db.commit()
-    return {"detail": "Deletion successful"}
+def delete(id: int, db: Session = Depends(get_db),current_user: schemas.authentication.TokenData = Depends(get_current_user)):
+    user = db.query(models.user.User).filter(models.user.User.email == current_user.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.is_admin:
+        d_product = db.query(models.product.Product).filter(models.product.Product.product_id == id).first()
+        if not d_product:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"Product with id {id} not found")
+        db.delete(d_product)
+        db.commit()
+        return {"detail": "Deletion successful"}
 
 @router.get('/show/{id}', response_model=schemas.product.Product, status_code=status.HTTP_200_OK)
 def show(id: int, db: Session = Depends(get_db)):

@@ -18,3 +18,4 @@ class Product(ProductBase):
     product_id:int
     class Config:
         orm_mode = True
+
