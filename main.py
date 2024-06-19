@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import user, category, product, cart, authentication
+from routers import user, category, product, cart, authentication, order
 import models
 from database import engine
 from starlette.middleware.cors import CORSMiddleware
@@ -13,6 +13,7 @@ app.include_router(category.router)
 app.include_router(product.router)
 app.include_router(cart.router)
 app.include_router(authentication.router)
+app.include_router(order.router)
 
 
 app.add_middleware(

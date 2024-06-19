@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, TIMESTAMP
 from sqlalchemy.orm import relationship
 from database import Base
-import datetime
+
 
 class Category(Base):
     __tablename__ = "categories"

@@ -15,4 +15,4 @@ class User(Base):
     phone = Column(String(20))
     is_admin = Column(Boolean, default=False)
     carts = relationship("Cart", back_populates="user")
-    # orders = relationship("Order", back_populates="user")
+    orders = relationship("Order", back_populates="user")
