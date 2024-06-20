@@ -18,12 +18,12 @@ def show_all(current_user: schemas.authentication.TokenData = Depends(get_curren
     user = db.query(models.user.User).filter(models.user.User.email == current_user.email).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    if user.is_admin:
-        categories = db.query(models.Category).all()
-        if not categories:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                detail="No categories found")
-        return categories
+ 
+    categories = db.query(models.Category).all()
+    if not categories:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="No categories found")
+    return categories
 
 
 @router.post('/create', )

@@ -12,6 +12,7 @@ class Order(Base):
     status = Column(String(50), default="Pending")
     phone = Column(String(20))  
     address = Column(String(200))  
+    name = Column(String(60)) 
 
     user = relationship("User", back_populates="orders")
     order_items = relationship("OrderItem", back_populates="order")

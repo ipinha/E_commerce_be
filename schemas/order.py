@@ -10,6 +10,7 @@ class OrderItemCreate(BaseModel):
 class OrderCreate(BaseModel):
     total: float
     status: Optional[str] = "Pending"
+    name:Optional[str]
     phone: Optional[str]
     address: Optional[str]
     order_items: List[OrderItemCreate]
